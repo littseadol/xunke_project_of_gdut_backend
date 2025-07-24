@@ -1,0 +1,71 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ruoyi.lab.mapper.AiAlarmLevelMapper">
+    
+    <resultMap type="AiAlarmLevel" id="AiAlarmLevelResult">
+        <result property="alarmLevelId"    column="alarm_level_id"    />
+        <result property="alarmLevelName"    column="alarm_level_name"    />
+        <result property="alarmLevelColor"    column="alarm_level_color"    />
+        <result property="alarmLevelDemonstrations"    column="alarm_level_demonstrations"    />
+        <result property="createTime"    column="create_time"    />
+    </resultMap>
+
+    <sql id="selectAiAlarmLevelVo">
+        select alarm_level_id, alarm_level_name, alarm_level_color, alarm_level_demonstrations, create_time from ai_alarm_level
+    </sql>
+
+    <select id="selectAiAlarmLevelList" parameterType="AiAlarmLevel" resultMap="AiAlarmLevelResult">
+        <include refid="selectAiAlarmLevelVo"/>
+        <where>  
+            <if test="alarmLevelName != null  and alarmLevelName != ''"> and alarm_level_name like concat('%', #{alarmLevelName}, '%')</if>
+            <if test="alarmLevelColor != null  and alarmLevelColor != ''"> and alarm_level_color like concat('%', #{alarmLevelColor}, '%')</if>
+            <if test="alarmLevelDemonstrations != null  and alarmLevelDemonstrations != ''"> and alarm_level_demonstrations like concat('%', #{alarmLevelDemonstrations}, '%')</if>
+            <if test="params.beginCreateTime != null and params.beginCreateTime != '' and params.endCreateTime != null and params.endCreateTime != ''"> and create_time between #{params.beginCreateTime} and #{params.endCreateTime}</if>
+        </where>
+    </select>
+    
+    <select id="selectAiAlarmLevelByAlarmLevelId" parameterType="Long" resultMap="AiAlarmLevelResult">
+        <include refid="selectAiAlarmLevelVo"/>
+        where alarm_level_id = #{alarmLevelId}
+    </select>
+
+    <insert id="insertAiAlarmLevel" parameterType="AiAlarmLevel" useGeneratedKeys="true" keyProperty="alarmLevelId">
+        insert into ai_alarm_level
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="alarmLevelName != null and alarmLevelName != ''">alarm_level_name,</if>
+            <if test="alarmLevelColor != null and alarmLevelColor != ''">alarm_level_color,</if>
+            <if test="alarmLevelDemonstrations != null and alarmLevelDemonstrations != ''">alarm_level_demonstrations,</if>
+            <if test="createTime != null">create_time,</if>
+         </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="alarmLevelName != null and alarmLevelName != ''">#{alarmLevelName},</if>
+            <if test="alarmLevelColor != null and alarmLevelColor != ''">#{alarmLevelColor},</if>
+            <if test="alarmLevelDemonstrations != null and alarmLevelDemonstrations != ''">#{alarmLevelDemonstrations},</if>
+            <if test="createTime != null">#{createTime},</if>
+         </trim>
+    </insert>
+
+    <update id="updateAiAlarmLevel" parameterType="AiAlarmLevel">
+        update ai_alarm_level
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="alarmLevelName != null and alarmLevelName != ''">alarm_level_name = #{alarmLevelName},</if>
+            <if test="alarmLevelColor != null and alarmLevelColor != ''">alarm_level_color = #{alarmLevelColor},</if>
+            <if test="alarmLevelDemonstrations != null and alarmLevelDemonstrations != ''">alarm_level_demonstrations = #{alarmLevelDemonstrations},</if>
+            <if test="createTime != null">create_time = #{createTime},</if>
+        </trim>
+        where alarm_level_id = #{alarmLevelId}
+    </update>
+
+    <delete id="deleteAiAlarmLevelByAlarmLevelId" parameterType="Long">
+        delete from ai_alarm_level where alarm_level_id = #{alarmLevelId}
+    </delete>
+
+    <delete id="deleteAiAlarmLevelByAlarmLevelIds" parameterType="String">
+        delete from ai_alarm_level where alarm_level_id in 
+        <foreach item="alarmLevelId" collection="array" open="(" separator="," close=")">
+            #{alarmLevelId}
+        </foreach>
+    </delete>
+</mapper>

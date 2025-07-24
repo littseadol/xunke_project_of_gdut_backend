@@ -1,0 +1,93 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ruoyi.lab.mapper.AiMonthReportMapper">
+    
+    <resultMap type="AiMonthReport" id="AiMonthReportResult">
+        <result property="monthReportId"    column="month_report_id"    />
+        <result property="monthReportNumber"    column="month_report_number"    />
+        <result property="monthReportScore"    column="month_report_score"    />
+        <result property="monthReportContent"    column="month_report_content"    />
+        <result property="createTime"    column="create_time"    />
+        <result property="roomName"    column="room_name"    />
+        <result property="buildingName"    column="building_name"    />
+        <result property="buildingFloor"    column="building_floor"    />
+        <result property="teamName"    column="team_name"    />
+    </resultMap>
+
+    <sql id="selectAiMonthReportVo">
+        select
+            ai_month_report.month_report_id,
+            month_report_number,
+            month_report_score,
+            month_report_content,
+            ai_month_report.create_time,
+            room_name,
+            building_floor,
+            building_name,
+            team_name
+        from ai_month_report
+                 left join ai_room_month_report on ai_month_report.month_report_id = ai_room_month_report.month_report_id
+                 left join ai_room on ai_room_month_report.room_id = ai_room.room_id
+                 left join ai_room_building on ai_room.room_id = ai_room_building.room_id
+                 left join ai_building on ai_room_building.building_id = ai_building.building_id
+                 left join ai_room_team on ai_room.room_id = ai_room_team.room_id
+                 left join ai_team on ai_room_team.team_id = ai_team.team_id
+    </sql>
+
+    <select id="selectAiMonthReportList" parameterType="AiMonthReport" resultMap="AiMonthReportResult">
+        <include refid="selectAiMonthReportVo"/>
+        <where>  
+            <if test="monthReportScore != null "> and month_report_score = #{monthReportScore}</if>
+            <if test="buildingFloor != null "> and building_floor = #{buildingFloor}</if>
+            <if test="monthReportContent != null  and monthReportContent != ''"> and month_report_content like concat('%', #{monthReportContent}, '%')</if>
+            <if test="roomName != null  and roomName != ''"> and room_name like concat('%', #{roomName}, '%')</if>
+            <if test="monthReportNumber != null  and monthReportNumber != ''"> and month_report_number like concat('%', #{monthReportNumber}, '%')</if>
+            <if test="buildingName != null  and buildingName != ''"> and building_name like concat('%', #{buildingName}, '%')</if>
+            <if test="teamName != null  and teamName != ''"> and team_name like concat('%', #{teamName}, '%')</if>
+
+            <if test="params.beginCreateTime != null and params.beginCreateTime != '' and params.endCreateTime != null and params.endCreateTime != ''"> and create_time between #{params.beginCreateTime} and #{params.endCreateTime}</if>
+        </where>
+    </select>
+    
+    <select id="selectAiMonthReportByMonthReportId" parameterType="Long" resultMap="AiMonthReportResult">
+        <include refid="selectAiMonthReportVo"/>
+        where month_report_id = #{monthReportId}
+    </select>
+
+    <insert id="insertAiMonthReport" parameterType="AiMonthReport" useGeneratedKeys="true" keyProperty="monthReportId">
+        insert into ai_month_report
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="monthReportScore != null">month_report_score,</if>
+            <if test="monthReportContent != null and monthReportContent != ''">month_report_content,</if>
+            <if test="createTime != null">create_time,</if>
+         </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="monthReportScore != null">#{monthReportScore},</if>
+            <if test="monthReportContent != null and monthReportContent != ''">#{monthReportContent},</if>
+            <if test="createTime != null">#{createTime},</if>
+         </trim>
+    </insert>
+
+    <update id="updateAiMonthReport" parameterType="AiMonthReport">
+        update ai_month_report
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="monthReportScore != null">month_report_score = #{monthReportScore},</if>
+            <if test="monthReportContent != null and monthReportContent != ''">month_report_content = #{monthReportContent},</if>
+            <if test="createTime != null">create_time = #{createTime},</if>
+        </trim>
+        where month_report_id = #{monthReportId}
+    </update>
+
+    <delete id="deleteAiMonthReportByMonthReportId" parameterType="Long">
+        delete from ai_month_report where month_report_id = #{monthReportId}
+    </delete>
+
+    <delete id="deleteAiMonthReportByMonthReportIds" parameterType="String">
+        delete from ai_month_report where month_report_id in 
+        <foreach item="monthReportId" collection="array" open="(" separator="," close=")">
+            #{monthReportId}
+        </foreach>
+    </delete>
+</mapper>

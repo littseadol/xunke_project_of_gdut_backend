@@ -1,0 +1,99 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ruoyi.lab.mapper.AiFaceMapper">
+    
+    <resultMap type="AiFace" id="AiFaceResult">
+        <result property="faceId"    column="face_id"    />
+        <result property="facePicture"    column="face_picture"    />
+        <result property="studentName"    column="student_name"    />
+        <result property="sutdentId"    column="sutdent_id"    />
+        <result property="studentMajor"    column="student_major"    />
+        <result property="studentGrade"    column="student_grade"    />
+        <result property="studentClass"    column="student_class"    />
+        <result property="studentPhone"    column="student_phone"    />
+        <result property="faceGroup"    column="face_group"    />
+        <result property="createTime"    column="create_time"    />
+    </resultMap>
+
+    <sql id="selectAiFaceVo">
+        select face_id, face_picture, student_name, sutdent_id, student_major, student_grade, student_class, student_phone, face_group, create_time from ai_face
+    </sql>
+
+    <select id="selectAiFaceList" parameterType="AiFace" resultMap="AiFaceResult">
+        <include refid="selectAiFaceVo"/>
+        <where>  
+            <if test="studentName != null  and studentName != ''"> and student_name like concat('%', #{studentName}, '%')</if>
+            <if test="sutdentId != null  and sutdentId != ''"> and sutdent_id like concat('%', #{sutdentId}, '%')</if>
+            <if test="studentMajor != null  and studentMajor != ''"> and student_major like concat('%', #{studentMajor}, '%')</if>
+            <if test="studentGrade != null  and studentGrade != ''"> and student_grade like concat('%', #{studentGrade}, '%')</if>
+            <if test="studentClass != null  and studentClass != ''"> and student_class like concat('%', #{studentClass}, '%')</if>
+            <if test="studentPhone != null  and studentPhone != ''"> and student_phone like concat('%', #{studentPhone}, '%')</if>
+            <if test="faceGroup != null "> and face_group = #{faceGroup}</if>
+            <if test="params.beginCreateTime != null and params.beginCreateTime != '' and params.endCreateTime != null and params.endCreateTime != ''"> and create_time between #{params.beginCreateTime} and #{params.endCreateTime}</if>
+        </where>
+    </select>
+    
+    <select id="selectAiFaceByFaceId" parameterType="Long" resultMap="AiFaceResult">
+        <include refid="selectAiFaceVo"/>
+        where face_id = #{faceId}
+    </select>
+
+    <insert id="insertAiFace" parameterType="AiFace" useGeneratedKeys="true" keyProperty="faceId">
+        insert into ai_face
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="facePicture != null">face_picture,</if>
+            <if test="studentName != null">student_name,</if>
+            <if test="sutdentId != null">sutdent_id,</if>
+            <if test="studentMajor != null">student_major,</if>
+            <if test="studentGrade != null">student_grade,</if>
+            <if test="studentClass != null">student_class,</if>
+            <if test="studentPhone != null">student_phone,</if>
+            <if test="faceGroup != null">face_group,</if>
+            <if test="createTime != null">create_time,</if>
+         </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="facePicture != null">#{facePicture},</if>
+            <if test="studentName != null">#{studentName},</if>
+            <if test="sutdentId != null">#{sutdentId},</if>
+            <if test="studentMajor != null">#{studentMajor},</if>
+            <if test="studentGrade != null">#{studentGrade},</if>
+            <if test="studentClass != null">#{studentClass},</if>
+            <if test="studentPhone != null">#{studentPhone},</if>
+            <if test="faceGroup != null">#{faceGroup},</if>
+            <if test="createTime != null">#{createTime},</if>
+         </trim>
+    </insert>
+
+    <update id="updateAiFace" parameterType="AiFace">
+        update ai_face
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="facePicture != null">face_picture = #{facePicture},</if>
+            <if test="studentName != null">student_name = #{studentName},</if>
+            <if test="sutdentId != null">sutdent_id = #{sutdentId},</if>
+            <if test="studentMajor != null">student_major = #{studentMajor},</if>
+            <if test="studentGrade != null">student_grade = #{studentGrade},</if>
+            <if test="studentClass != null">student_class = #{studentClass},</if>
+            <if test="studentPhone != null">student_phone = #{studentPhone},</if>
+            <if test="faceGroup != null">face_group = #{faceGroup},</if>
+            <if test="createTime != null">create_time = #{createTime},</if>
+        </trim>
+        where face_id = #{faceId}
+    </update>
+
+    <delete id="deleteAiFaceByFaceId" parameterType="Long">
+        delete from ai_face where face_id = #{faceId}
+    </delete>
+
+    <delete id="deleteAiFaceByFaceIds" parameterType="String">
+        delete from ai_face where face_id in 
+        <foreach item="faceId" collection="array" open="(" separator="," close=")">
+            #{faceId}
+        </foreach>
+    </delete>
+
+    <select id="selectCount">
+        select count(*) from ai_face
+    </select>
+</mapper>

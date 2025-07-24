@@ -1,0 +1,92 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ruoyi.lab.mapper.AiWeekReportMapper">
+    
+    <resultMap type="AiWeekReport" id="AiWeekReportResult">
+        <result property="weekReportId"    column="week_report_id"    />
+        <result property="weekReportNumber"    column="week_report_number"    />
+        <result property="weekReportScore"    column="week_report_score"    />
+        <result property="weekReportContent"    column="week_report_content"    />
+        <result property="createTime"    column="create_time"    />
+        <result property="roomName"    column="room_name"    />
+        <result property="buildingFloor"    column="building_floor"    />
+        <result property="buildingName"    column="building_name"    />
+        <result property="teamName"    column="team_name"    />
+    </resultMap>
+
+    <sql id="selectAiWeekReportVo">
+        select
+            ai_week_report.week_report_id,
+            week_report_number,
+            week_report_score,
+            week_report_content,
+            ai_week_report.create_time,
+            room_name,
+            building_floor,
+            building_name,
+            team_name
+        from ai_week_report
+                 left join ai_room_week_report on ai_week_report.week_report_id = ai_room_week_report.week_report_id
+                 left join ai_room on ai_room_week_report.room_id = ai_room.room_id
+                 left join ai_room_building on ai_room.room_id = ai_room_building.room_id
+                 left join ai_building on ai_room_building.building_id = ai_building.building_id
+                 left join ai_room_team on ai_room.room_id = ai_room_team.room_id
+                 left join ai_team on ai_room_team.team_id = ai_team.team_id
+    </sql>
+
+    <select id="selectAiWeekReportList" parameterType="AiWeekReport" resultMap="AiWeekReportResult">
+        <include refid="selectAiWeekReportVo"/>
+        <where>  
+            <if test="weekReportScore != null "> and week_report_score = #{weekReportScore}</if>
+            <if test="buildingFloor != null "> and building_floor = #{buildingFloor}</if>
+            <if test="weekReportContent != null  and weekReportContent != ''"> and week_report_content like concat('%', #{weekReportContent}, '%')</if>
+            <if test="roomName != null  and roomName != ''"> and room_name like concat('%', #{roomName}, '%')</if>
+            <if test="weekReportNumber != null  and weekReportNumber != ''"> and week_report_number like concat('%', #{weekReportNumber}, '%')</if>
+            <if test="buildingName != null  and buildingName != ''"> and building_name like concat('%', #{buildingName}, '%')</if>
+            <if test="teamName != null  and teamName != ''"> and team_name like concat('%', #{teamName}, '%')</if>
+            <if test="params.beginCreateTime != null and params.beginCreateTime != '' and params.endCreateTime != null and params.endCreateTime != ''"> and create_time between #{params.beginCreateTime} and #{params.endCreateTime}</if>
+        </where>
+    </select>
+    
+    <select id="selectAiWeekReportByWeekReportId" parameterType="Long" resultMap="AiWeekReportResult">
+        <include refid="selectAiWeekReportVo"/>
+        where ai_week_report.week_report_id = #{weekReportId}
+    </select>
+
+    <insert id="insertAiWeekReport" parameterType="AiWeekReport" useGeneratedKeys="true" keyProperty="weekReportId">
+        insert into ai_week_report
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="weekReportScore != null">week_report_score,</if>
+            <if test="weekReportContent != null and weekReportContent != ''">week_report_content,</if>
+            <if test="createTime != null">create_time,</if>
+         </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="weekReportScore != null">#{weekReportScore},</if>
+            <if test="weekReportContent != null and weekReportContent != ''">#{weekReportContent},</if>
+            <if test="createTime != null">#{createTime},</if>
+         </trim>
+    </insert>
+
+    <update id="updateAiWeekReport" parameterType="AiWeekReport">
+        update ai_week_report
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="weekReportScore != null">week_report_score = #{weekReportScore},</if>
+            <if test="weekReportContent != null and weekReportContent != ''">week_report_content = #{weekReportContent},</if>
+            <if test="createTime != null">create_time = #{createTime},</if>
+        </trim>
+        where week_report_id = #{weekReportId}
+    </update>
+
+    <delete id="deleteAiWeekReportByWeekReportId" parameterType="Long">
+        delete from ai_week_report where week_report_id = #{weekReportId}
+    </delete>
+
+    <delete id="deleteAiWeekReportByWeekReportIds" parameterType="String">
+        delete from ai_week_report where week_report_id in 
+        <foreach item="weekReportId" collection="array" open="(" separator="," close=")">
+            #{weekReportId}
+        </foreach>
+    </delete>
+</mapper>

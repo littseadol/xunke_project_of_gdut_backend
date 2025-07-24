@@ -1,0 +1,95 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ruoyi.lab.mapper.AiTeamMapper">
+    
+    <resultMap type="AiTeam" id="AiTeamResult">
+        <result property="teamId"    column="team_id"    />
+        <result property="teamName"    column="team_name"    />
+        <result property="chargeName"    column="charge_name"    />
+        <result property="chargeWorkNumber"    column="charge_work_number"    />
+        <result property="chargePhone"    column="charge_phone"    />
+        <result property="adminName"    column="admin_name"    />
+        <result property="adminWorkNumber"    column="admin_work_number"    />
+        <result property="adminPhone"    column="admin_phone"    />
+        <result property="createTime"    column="create_time"    />
+    </resultMap>
+
+    <sql id="selectAiTeamVo">
+        select team_id, team_name, charge_name, charge_work_number, charge_phone, admin_name, admin_work_number, admin_phone, create_time from ai_team
+    </sql>
+
+    <select id="selectAiTeamList" parameterType="AiTeam" resultMap="AiTeamResult">
+        <include refid="selectAiTeamVo"/>
+        <where>  
+            <if test="teamName != null  and teamName != ''"> and team_name like concat('%', #{teamName}, '%')</if>
+            <if test="chargeName != null  and chargeName != ''"> and charge_name like concat('%', #{chargeName}, '%')</if>
+            <if test="chargeWorkNumber != null  and chargeWorkNumber != ''"> and charge_work_number like concat('%', #{chargeWorkNumber}, '%')</if>
+            <if test="chargePhone != null  and chargePhone != ''"> and charge_phone like concat('%', #{chargePhone}, '%')</if>
+            <if test="adminName != null  and adminName != ''"> and admin_name like concat('%', #{adminName}, '%')</if>
+            <if test="adminWorkNumber != null  and adminWorkNumber != ''"> and admin_work_number like concat('%', #{adminWorkNumber}, '%')</if>
+            <if test="adminPhone != null  and adminPhone != ''"> and admin_phone like concat('%', #{adminPhone}, '%')</if>
+            <if test="params.beginCreateTime != null and params.beginCreateTime != '' and params.endCreateTime != null and params.endCreateTime != ''"> and create_time between #{params.beginCreateTime} and #{params.endCreateTime}</if>
+        </where>
+    </select>
+    
+    <select id="selectAiTeamByTeamId" parameterType="Long" resultMap="AiTeamResult">
+        <include refid="selectAiTeamVo"/>
+        where team_id = #{teamId}
+    </select>
+
+    <insert id="insertAiTeam" parameterType="AiTeam" useGeneratedKeys="true" keyProperty="teamId">
+        insert into ai_team
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="teamName != null and teamName != ''">team_name,</if>
+            <if test="chargeName != null and chargeName != ''">charge_name,</if>
+            <if test="chargeWorkNumber != null and chargeWorkNumber != ''">charge_work_number,</if>
+            <if test="chargePhone != null and chargePhone != ''">charge_phone,</if>
+            <if test="adminName != null and adminName != ''">admin_name,</if>
+            <if test="adminWorkNumber != null and adminWorkNumber != ''">admin_work_number,</if>
+            <if test="adminPhone != null and adminPhone != ''">admin_phone,</if>
+            <if test="createTime != null">create_time,</if>
+         </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="teamName != null and teamName != ''">#{teamName},</if>
+            <if test="chargeName != null and chargeName != ''">#{chargeName},</if>
+            <if test="chargeWorkNumber != null and chargeWorkNumber != ''">#{chargeWorkNumber},</if>
+            <if test="chargePhone != null and chargePhone != ''">#{chargePhone},</if>
+            <if test="adminName != null and adminName != ''">#{adminName},</if>
+            <if test="adminWorkNumber != null and adminWorkNumber != ''">#{adminWorkNumber},</if>
+            <if test="adminPhone != null and adminPhone != ''">#{adminPhone},</if>
+            <if test="createTime != null">#{createTime},</if>
+         </trim>
+    </insert>
+
+    <update id="updateAiTeam" parameterType="AiTeam">
+        update ai_team
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="teamName != null and teamName != ''">team_name = #{teamName},</if>
+            <if test="chargeName != null and chargeName != ''">charge_name = #{chargeName},</if>
+            <if test="chargeWorkNumber != null and chargeWorkNumber != ''">charge_work_number = #{chargeWorkNumber},</if>
+            <if test="chargePhone != null and chargePhone != ''">charge_phone = #{chargePhone},</if>
+            <if test="adminName != null and adminName != ''">admin_name = #{adminName},</if>
+            <if test="adminWorkNumber != null and adminWorkNumber != ''">admin_work_number = #{adminWorkNumber},</if>
+            <if test="adminPhone != null and adminPhone != ''">admin_phone = #{adminPhone},</if>
+            <if test="createTime != null">create_time = #{createTime},</if>
+        </trim>
+        where team_id = #{teamId}
+    </update>
+
+    <delete id="deleteAiTeamByTeamId" parameterType="Long">
+        delete from ai_team where team_id = #{teamId}
+    </delete>
+
+    <delete id="deleteAiTeamByTeamIds" parameterType="String">
+        delete from ai_team where team_id in 
+        <foreach item="teamId" collection="array" open="(" separator="," close=")">
+            #{teamId}
+        </foreach>
+    </delete>
+
+    <select id="selectCount" resultType="int">
+        select count(*) from ai_team
+    </select>
+</mapper>

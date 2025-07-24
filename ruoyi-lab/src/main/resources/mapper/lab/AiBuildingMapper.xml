@@ -1,0 +1,76 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ruoyi.lab.mapper.AiBuildingMapper">
+    
+    <resultMap type="AiBuilding" id="AiBuildingResult">
+        <result property="buildingId"    column="building_id"    />
+        <result property="buildingName"    column="building_name"    />
+        <result property="buildingTotalFloor"    column="building_total_floor"    />
+        <result property="buildingType"    column="building_type"    />
+        <result property="createTime"    column="create_time"    />
+    </resultMap>
+
+    <sql id="selectAiBuildingVo">
+        select building_id, building_name, building_total_floor, building_type, create_time from ai_building
+    </sql>
+
+    <select id="selectAiBuildingList" parameterType="AiBuilding" resultMap="AiBuildingResult">
+        <include refid="selectAiBuildingVo"/>
+        <where>  
+            <if test="buildingName != null  and buildingName != ''"> and building_name like concat('%', #{buildingName}, '%')</if>
+            <if test="buildingTotalFloor != null "> and building_total_floor = #{buildingTotalFloor}</if>
+            <if test="buildingType != null "> and building_type = #{buildingType}</if>
+            <if test="params.beginCreateTime != null and params.beginCreateTime != '' and params.endCreateTime != null and params.endCreateTime != ''"> and create_time between #{params.beginCreateTime} and #{params.endCreateTime}</if>
+        </where>
+    </select>
+    
+    <select id="selectAiBuildingByBuildingId" parameterType="Long" resultMap="AiBuildingResult">
+        <include refid="selectAiBuildingVo"/>
+        where building_id = #{buildingId}
+    </select>
+
+    <insert id="insertAiBuilding" parameterType="AiBuilding" useGeneratedKeys="true" keyProperty="buildingId">
+        insert into ai_building
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="buildingName != null and buildingName != ''">building_name,</if>
+            <if test="buildingTotalFloor != null">building_total_floor,</if>
+            <if test="buildingType != null">building_type,</if>
+            <if test="createTime != null">create_time,</if>
+         </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="buildingName != null and buildingName != ''">#{buildingName},</if>
+            <if test="buildingTotalFloor != null">#{buildingTotalFloor},</if>
+            <if test="buildingType != null">#{buildingType},</if>
+            <if test="createTime != null">#{createTime},</if>
+         </trim>
+    </insert>
+
+    <update id="updateAiBuilding" parameterType="AiBuilding">
+        update ai_building
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="buildingName != null and buildingName != ''">building_name = #{buildingName},</if>
+            <if test="buildingTotalFloor != null">building_total_floor = #{buildingTotalFloor},</if>
+            <if test="buildingType != null">building_type = #{buildingType},</if>
+            <if test="createTime != null">create_time = #{createTime},</if>
+        </trim>
+        where building_id = #{buildingId}
+    </update>
+
+    <delete id="deleteAiBuildingByBuildingId" parameterType="Long">
+        delete from ai_building where building_id = #{buildingId}
+    </delete>
+
+    <delete id="deleteAiBuildingByBuildingIds" parameterType="String">
+        delete from ai_building where building_id in 
+        <foreach item="buildingId" collection="array" open="(" separator="," close=")">
+            #{buildingId}
+        </foreach>
+    </delete>
+
+    <!--  获取总数量  -->
+    <select id="selectCount" resultType="int">
+        select count(*) from ai_building
+    </select>
+</mapper>

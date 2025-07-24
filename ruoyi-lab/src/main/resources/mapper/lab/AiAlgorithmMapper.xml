@@ -1,0 +1,108 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ruoyi.lab.mapper.AiAlgorithmMapper">
+    
+    <resultMap type="AiAlgorithm" id="AiAlgorithmResult">
+        <result property="algorithmId"    column="algorithm_id"    />
+        <result property="algorithmName"    column="algorithm_name"    />
+        <result property="algorithmPlatform"    column="algorithm_platform"    />
+        <result property="algorithmPicture"    column="algorithm_picture"    />
+        <result property="algorithmCopywriting"    column="algorithm_copywriting"    />
+        <result property="createTime"    column="create_time"    />
+        <result property="alarmLevelId"    column="alarm_level_id"    />
+        <result property="alarmLevelName"    column="alarm_level_name"    />
+    </resultMap>
+
+    <sql id="selectAiAlgorithmVo">
+        select ai_algorithm.algorithm_id, algorithm_name, algorithm_platform, algorithm_picture, algorithm_copywriting, ai_algorithm.create_time,
+               ai_alarm_level.alarm_level_id, alarm_level_name
+        from ai_algorithm
+                 left join ai_algorithm_alarm_level on ai_algorithm.algorithm_id = ai_algorithm_alarm_level.algorithm_id
+                 left join ai_alarm_level on ai_algorithm_alarm_level.alarm_level_id = ai_alarm_level.alarm_level_id
+    </sql>
+
+    <select id="selectAiAlgorithmList" parameterType="AiAlgorithm" resultMap="AiAlgorithmResult">
+        <include refid="selectAiAlgorithmVo"/>
+        <where>  
+            <if test="algorithmName != null  and algorithmName != ''"> and algorithm_name like concat('%', #{algorithmName}, '%')</if>
+            <if test="algorithmPlatform != null "> and algorithm_platform = #{algorithmPlatform}</if>
+            <if test="alarmLevelId != null "> and ai_algorithm_alarm_level.alarm_level_id = #{alarmLevelId}</if>
+            <if test="algorithmPicture != null  and algorithmPicture != ''"> and algorithm_picture like concat('%', #{algorithmPicture}, '%')</if>
+            <if test="algorithmCopywriting != null  and algorithmCopywriting != ''"> and algorithm_copywriting like concat('%', #{algorithmCopywriting}, '%')</if>
+            <if test="params.beginCreateTime != null and params.beginCreateTime != '' and params.endCreateTime != null and params.endCreateTime != ''"> and create_time between #{params.beginCreateTime} and #{params.endCreateTime}</if>
+        </where>
+    </select>
+    
+    <select id="selectAiAlgorithmByAlgorithmId" parameterType="Long" resultMap="AiAlgorithmResult">
+        <include refid="selectAiAlgorithmVo"/>
+        where ai_algorithm.algorithm_id = #{algorithmId}
+    </select>
+
+    <!--  添加算法  -->
+    <insert id="insertAiAlgorithm" parameterType="AiAlgorithm" useGeneratedKeys="true" keyProperty="algorithmId">
+        insert into ai_algorithm
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="algorithmName != null and algorithmName != ''">algorithm_name,</if>
+            <if test="algorithmPlatform != null">algorithm_platform,</if>
+            <if test="algorithmPicture != null and algorithmPicture != ''">algorithm_picture,</if>
+            <if test="algorithmCopywriting != null and algorithmCopywriting != ''">algorithm_copywriting,</if>
+            <if test="createTime != null">create_time,</if>
+         </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="algorithmName != null and algorithmName != ''">#{algorithmName},</if>
+            <if test="algorithmPlatform != null">#{algorithmPlatform},</if>
+            <if test="algorithmPicture != null and algorithmPicture != ''">#{algorithmPicture},</if>
+            <if test="algorithmCopywriting != null and algorithmCopywriting != ''">#{algorithmCopywriting},</if>
+            <if test="createTime != null">#{createTime},</if>
+         </trim>
+    </insert>
+    <insert id="insertAlgorithmAlarmLevel">
+        insert into ai_algorithm_alarm_level(algorithm_id, alarm_level_id)values(#{algorithmId}, #{alarmLevelId})
+    </insert>
+
+    <!-- 更新算法 -->
+    <update id="updateAiAlgorithm" parameterType="AiAlgorithm">
+        update ai_algorithm
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="algorithmName != null and algorithmName != ''">algorithm_name = #{algorithmName},</if>
+            <if test="algorithmPlatform != null">algorithm_platform = #{algorithmPlatform},</if>
+            <if test="algorithmPicture != null and algorithmPicture != ''">algorithm_picture = #{algorithmPicture},</if>
+            <if test="algorithmCopywriting != null and algorithmCopywriting != ''">algorithm_copywriting = #{algorithmCopywriting},</if>
+            <if test="createTime != null">create_time = #{createTime},</if>
+        </trim>
+        where algorithm_id = #{algorithmId}
+    </update>
+    <update id="updateAlgorithmAlarmLevel">
+        update ai_algorithm_alarm_level set alarm_level_id = #{alarmLevelId} where algorithm_id = #{algorithmId}
+    </update>
+
+    <!--  删除算法  -->
+    <delete id="deleteAiAlgorithmByAlgorithmId" parameterType="Long">
+        delete from ai_algorithm where algorithm_id = #{algorithmId}
+    </delete>
+    <delete id="deleteAlgorithmAlarmLevelByAlgorithmId">
+        delete from ai_algorithm_alarm_level where algorithm_id = #{algorithmId}
+    </delete>
+
+    <!-- 批量删除算法   -->
+    <delete id="deleteAiAlgorithmByAlgorithmIds" parameterType="String">
+        delete from ai_algorithm where algorithm_id in 
+        <foreach item="algorithmId" collection="array" open="(" separator="," close=")">
+            #{algorithmId}
+        </foreach>
+    </delete>
+    <delete id="deleteAiAlgorithmAlarmLevelByAlgorithmIds" parameterType="String">
+        delete from ai_algorithm_alarm_level where algorithm_id in
+        <foreach item="algorithmId" collection="array" open="(" separator="," close=")">
+            #{algorithmId}
+        </foreach>
+    </delete>
+
+    <!--  获取算法个数  -->
+    <select id="selectCount">
+        select count(*) from ai_algorithm
+    </select>
+
+</mapper>

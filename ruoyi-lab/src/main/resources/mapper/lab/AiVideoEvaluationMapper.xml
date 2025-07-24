@@ -1,0 +1,99 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ruoyi.lab.mapper.AiVideoEvaluationMapper">
+    
+    <resultMap type="AiVideoEvaluation" id="AiVideoEvaluationResult">
+        <result property="id"    column="id"    />
+        <result property="deviceId"    column="device_id"    />
+        <result property="score"    column="score"    />
+        <result property="content"    column="content"    />
+        <result property="suggestion"    column="suggestion"    />
+        <result property="snapshotPath"    column="snapshot_path"    />
+        <result property="snapshotTime"    column="snapshot_time"    />
+        <result property="videoTime"    column="video_time"    />
+        <result property="createBy"    column="create_by"    />
+        <result property="createTime"    column="create_time"    />
+        <result property="updateBy"    column="update_by"    />
+        <result property="updateTime"    column="update_time"    />
+    </resultMap>
+
+    <sql id="selectAiVideoEvaluationVo">
+        select id, device_id, score, content, suggestion, snapshot_path, snapshot_time, video_time, create_by, create_time, update_by, update_time from ai_video_evaluation
+    </sql>
+
+    <select id="selectAiVideoEvaluationList" parameterType="AiVideoEvaluation" resultMap="AiVideoEvaluationResult">
+        <include refid="selectAiVideoEvaluationVo"/>
+        <where>  
+            <if test="deviceId != null  and deviceId != ''"> and device_id = #{deviceId}</if>
+            <if test="score != null "> and score = #{score}</if>
+            <if test="snapshotTime != null "> and snapshot_time = #{snapshotTime}</if>
+            <if test="videoTime != null "> and video_time = #{videoTime}</if>
+        </where>
+    </select>
+    
+    <select id="selectAiVideoEvaluationById" parameterType="Long" resultMap="AiVideoEvaluationResult">
+        <include refid="selectAiVideoEvaluationVo"/>
+        where id = #{id}
+    </select>
+
+    <insert id="insertAiVideoEvaluation" parameterType="AiVideoEvaluation" useGeneratedKeys="true" keyProperty="id">
+        insert into ai_video_evaluation
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="deviceId != null and deviceId != ''">device_id,</if>
+            <if test="score != null">score,</if>
+            <if test="content != null and content != ''">content,</if>
+            <if test="suggestion != null">suggestion,</if>
+            <if test="snapshotPath != null and snapshotPath != ''">snapshot_path,</if>
+            <if test="snapshotTime != null">snapshot_time,</if>
+            <if test="videoTime != null">video_time,</if>
+            <if test="createBy != null">create_by,</if>
+            <if test="createTime != null">create_time,</if>
+            <if test="updateBy != null">update_by,</if>
+            <if test="updateTime != null">update_time,</if>
+         </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="deviceId != null and deviceId != ''">#{deviceId},</if>
+            <if test="score != null">#{score},</if>
+            <if test="content != null and content != ''">#{content},</if>
+            <if test="suggestion != null">#{suggestion},</if>
+            <if test="snapshotPath != null and snapshotPath != ''">#{snapshotPath},</if>
+            <if test="snapshotTime != null">#{snapshotTime},</if>
+            <if test="videoTime != null">#{videoTime},</if>
+            <if test="createBy != null">#{createBy},</if>
+            <if test="createTime != null">#{createTime},</if>
+            <if test="updateBy != null">#{updateBy},</if>
+            <if test="updateTime != null">#{updateTime},</if>
+         </trim>
+    </insert>
+
+    <update id="updateAiVideoEvaluation" parameterType="AiVideoEvaluation">
+        update ai_video_evaluation
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="deviceId != null and deviceId != ''">device_id = #{deviceId},</if>
+            <if test="score != null">score = #{score},</if>
+            <if test="content != null and content != ''">content = #{content},</if>
+            <if test="suggestion != null">suggestion = #{suggestion},</if>
+            <if test="snapshotPath != null and snapshotPath != ''">snapshot_path = #{snapshotPath},</if>
+            <if test="snapshotTime != null">snapshot_time = #{snapshotTime},</if>
+            <if test="videoTime != null">video_time = #{videoTime},</if>
+            <if test="createBy != null">create_by = #{createBy},</if>
+            <if test="createTime != null">create_time = #{createTime},</if>
+            <if test="updateBy != null">update_by = #{updateBy},</if>
+            <if test="updateTime != null">update_time = #{updateTime},</if>
+        </trim>
+        where id = #{id}
+    </update>
+
+    <delete id="deleteAiVideoEvaluationById" parameterType="Long">
+        delete from ai_video_evaluation where id = #{id}
+    </delete>
+
+    <delete id="deleteAiVideoEvaluationByIds" parameterType="String">
+        delete from ai_video_evaluation where id in 
+        <foreach item="id" collection="array" open="(" separator="," close=")">
+            #{id}
+        </foreach>
+    </delete>
+</mapper>

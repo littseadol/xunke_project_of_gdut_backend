@@ -1,0 +1,159 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ruoyi.lab.mapper.AiDeviceMapper">
+    
+    <resultMap type="com.ruoyi.lab.domain.AiDevice" id="AiDevice">
+    	<id     property="deviceId"                 column="device_id" />
+        <result property="deviceName"               column="device_name" />
+        <result property="groupId"               column="group_id" />
+        <result property="groupName"               column="group_name" />
+        <result property="algorithmNumber"               column="algorithm_number" />
+        <result property="rtspUrl"            column="rtsp_url" />
+        <result property="snapshotUrl"        column="snapshot_url" />
+        <result property="identifyInterval"   column="identify_interval" />
+        <result property="alarmInterval"      column="alarm_interval" />
+        <result property="deviceLng"      column="device_lng" />
+        <result property="deviceLat"      column="device_lat" />
+        <result property="createTime"      column="create_time" />
+    </resultMap>
+
+    <resultMap type="com.ruoyi.lab.domain.AiDeviceAlgorithm" id="AiDeviceAlgorithm">
+        <id     property="id"                 column="id" />
+        <result property="deviceId"               column="device_id" />
+        <result property="algorithmId"               column="algorithm_id" />
+        <result property="algorithmName"               column="algorithm_name" />
+        <result property="status"               column="status" />
+        <result property="sensitivity"            column="sensitivity" />
+        <result property="pixels"        column="pixels" />
+        <result property="alarmTimes"   column="alarm_times" />
+    </resultMap>
+
+    <sql id="selectAiDeviceVo">
+        select
+        ai_device.device_id as device_id,
+        device_name,
+        rtsp_url,
+        snapshot_url,
+        identify_interval,
+        alarm_interval,
+        ai_group.group_id as group_id,
+        group_name,
+        device_lng,
+        device_lat,
+        ai_device.create_time,
+        count(CASE WHEN ai_device_algorithm.status = 0 THEN 1 ELSE NULL END) as algorithm_number
+        from ai_device
+        left join ai_device_group on ai_device.device_id = ai_device_group.device_id
+        left join ai_group on ai_device_group.group_id = ai_group.group_id
+        left join ai_device_algorithm on ai_device.device_id = ai_device_algorithm.device_id
+
+        <where>
+            <if test="deviceName != null  and deviceName != ''"> and device_name like concat('%', #{deviceName}, '%')</if>
+            <if test="groupName != null  and groupName != ''"> and group_name like concat('%', #{groupName}, '%')</if>
+            <if test="rtspUrl != null  and rtspUrl != ''"> and rtsp_url like concat('%', #{rtspUrl}, '%')</if>
+            <if test="identifyInterval != null  and identifyInterval != ''"> and identify_interval = #{identifyInterval}</if>
+            <if test="alarmInterval != null  and alarmInterval != ''"> and alarm_interval = #{alarmInterval}</if>
+            <if test="groupId != null  and groupId != ''"> and ai_group.group_id = #{groupId}</if>
+            <if test="params.beginCreateTime != null and params.beginCreateTime != '' and params.endCreateTime != null and params.endCreateTime != ''"> and ai_device.create_time between #{params.beginCreateTime} and #{params.endCreateTime}</if>
+        </where>
+        group by device_id, group_id
+        <if test="algorithmNumber != null  and algorithmNumber != ''"> having algorithm_number = #{algorithmNumber}</if>
+    </sql>
+
+    <!--  添加设备  -->
+    <insert id="addDevice" parameterType="AiDevice" useGeneratedKeys="true" keyProperty="deviceId">
+        insert into ai_device (device_name, rtsp_url, snapshot_url, identify_interval, alarm_interval)values(#{deviceName}, #{rtspUrl}, #{snapshotUrl}, #{identifyInterval}, #{alarmInterval})
+    </insert>
+    <insert id="insertAiDeviceGroup" useGeneratedKeys="true">
+        insert into ai_device_group(device_id, group_id)values(#{deviceId}, #{groupId})
+    </insert>
+    <insert id="addDeviceAlgorithm" parameterType="AiDeviceAlgorithm" useGeneratedKeys="true" keyProperty="id">
+        insert into ai_device_algorithm (device_id, algorithm_id, status, sensitivity, pixels, alarm_times)values(#{deviceId}, #{algorithmId}, #{status}, #{sensitivity}, #{pixels}, #{alarmTimes})
+    </insert>
+
+    <!-- 分页获取设备列表  -->
+    <select id="getDeviceList" parameterType="AiDevice" resultMap="AiDevice">
+        <include refid="selectAiDeviceVo"/>
+    </select>
+
+    <!--  删除设备  -->
+    <delete id="deleteDevice">
+        delete from ai_device where device_id = #{deviceId}
+    </delete>
+    <delete id="deleteAiDeviceGroup">
+        delete from ai_device_group where device_id = #{deviceId}
+    </delete>
+    <delete id="deleteDeviceAlgorithm">
+        delete from ai_device_algorithm where device_id = #{deviceId}
+    </delete>
+
+    <!-- 根据设备id获取设备的算法列表   -->
+    <select id="getDeviceAlgorithmListByDeviceId" resultMap="AiDeviceAlgorithm">
+        select
+        ai_device_algorithm.id as id,
+        device_id,
+        ai_device_algorithm.algorithm_id as algorithm_id,
+        algorithm_name,
+        status,
+        sensitivity,
+        pixels,
+        alarm_times
+        from ai_device_algorithm
+        inner join ai_algorithm on ai_device_algorithm.algorithm_id = ai_algorithm.algorithm_id
+        where device_id = #{deviceId}
+    </select>
+
+    <!--  更新设备、更新设备对应的分组、更新设备对应的算法  -->
+    <update id="updateDevice" parameterType="AiDevice">
+        update ai_device set
+        device_name = #{deviceName},
+        rtsp_url = #{rtspUrl},
+        snapshot_url = #{snapshotUrl},
+        identify_interval = #{identifyInterval},
+        alarm_interval = #{alarmInterval}
+        where ai_device.device_id = #{deviceId}
+    </update>
+    <update id="updateDeviceGroup">
+        update ai_device_group set group_id = #{groupId}
+        where device_id = #{deviceId}
+    </update>
+    <update id="updateDeviceAlgorithm" parameterType="AiDeviceAlgorithm">
+        update ai_device_algorithm
+        set status = #{status}, sensitivity = #{sensitivity}, pixels = #{pixels}, alarm_times = #{alarmTimes}
+        where device_id = #{deviceId} and algorithm_id = #{algorithmId}
+    </update>
+
+    <!--  获取所有的设备  -->
+    <select id="selectAllDeviceList" resultMap="AiDevice">
+        select ai_device.device_id as device_id, group_id, device_name from ai_device
+        inner join ai_device_group on ai_device.device_id = ai_device_group.device_id
+    </select>
+
+    <!-- 更新选中状态 -->
+    <update id="updateCheckStatus">
+        update ai_device set check_status = #{checkStatus} where device_id = #{deviceId}
+    </update>
+
+    <!--  获取被选中的设备  -->
+    <select id="getCheckedDeviceList" resultMap="AiDevice">
+        select device_id, rtsp_url from ai_device where check_status = 0
+    </select>
+
+    <!-- 根据设备id获取rtsp地址  -->
+    <select id="getRtspUrlByDeviceId">
+        select rtsp_url from ai_device where device_id = #{deviceId}
+    </select>
+
+    <!--  获取设备数量  -->
+    <select id="selectCount">
+        select count(*) from ai_device
+    </select>
+
+    <!--  更新坐标  -->
+    <update id="updateCoordinate">
+        update ai_device set device_lng = #{deviceLng}, device_lat = #{deviceLat} where device_id = #{deviceId}
+    </update>
+    
+</mapper>

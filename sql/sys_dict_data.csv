@@ -1,0 +1,92 @@
+1,1,男,0,sys_user_sex,"","",Y,0,admin,2025-06-16 17:42:16,"",,性别男
+2,2,女,1,sys_user_sex,"","",N,0,admin,2025-06-16 17:42:16,"",,性别女
+3,3,未知,2,sys_user_sex,"","",N,0,admin,2025-06-16 17:42:16,"",,性别未知
+4,1,显示,0,sys_show_hide,"",primary,Y,0,admin,2025-06-16 17:42:16,"",,显示菜单
+5,2,隐藏,1,sys_show_hide,"",danger,N,0,admin,2025-06-16 17:42:16,"",,隐藏菜单
+6,1,正常,0,sys_normal_disable,"",primary,Y,0,admin,2025-06-16 17:42:16,"",,正常状态
+7,2,停用,1,sys_normal_disable,"",danger,N,0,admin,2025-06-16 17:42:16,"",,停用状态
+8,1,正常,0,sys_job_status,"",primary,Y,0,admin,2025-06-16 17:42:16,"",,正常状态
+9,2,暂停,1,sys_job_status,"",danger,N,0,admin,2025-06-16 17:42:16,"",,停用状态
+10,1,默认,DEFAULT,sys_job_group,"","",Y,0,admin,2025-06-16 17:42:16,"",,默认分组
+11,2,系统,SYSTEM,sys_job_group,"","",N,0,admin,2025-06-16 17:42:16,"",,系统分组
+12,1,是,Y,sys_yes_no,"",primary,Y,0,admin,2025-06-16 17:42:16,"",,系统默认是
+13,2,否,N,sys_yes_no,"",danger,N,0,admin,2025-06-16 17:42:16,"",,系统默认否
+14,1,通知,1,sys_notice_type,"",warning,Y,0,admin,2025-06-16 17:42:16,"",,通知
+15,2,公告,2,sys_notice_type,"",success,N,0,admin,2025-06-16 17:42:16,"",,公告
+16,1,正常,0,sys_notice_status,"",primary,Y,0,admin,2025-06-16 17:42:16,"",,正常状态
+17,2,关闭,1,sys_notice_status,"",danger,N,0,admin,2025-06-16 17:42:16,"",,关闭状态
+18,99,其他,0,sys_oper_type,"",info,N,0,admin,2025-06-16 17:42:16,"",,其他操作
+19,1,新增,1,sys_oper_type,"",info,N,0,admin,2025-06-16 17:42:16,"",,新增操作
+20,2,修改,2,sys_oper_type,"",info,N,0,admin,2025-06-16 17:42:16,"",,修改操作
+21,3,删除,3,sys_oper_type,"",danger,N,0,admin,2025-06-16 17:42:16,"",,删除操作
+22,4,授权,4,sys_oper_type,"",primary,N,0,admin,2025-06-16 17:42:16,"",,授权操作
+23,5,导出,5,sys_oper_type,"",warning,N,0,admin,2025-06-16 17:42:16,"",,导出操作
+24,6,导入,6,sys_oper_type,"",warning,N,0,admin,2025-06-16 17:42:16,"",,导入操作
+25,7,强退,7,sys_oper_type,"",danger,N,0,admin,2025-06-16 17:42:16,"",,强退操作
+26,8,生成代码,8,sys_oper_type,"",warning,N,0,admin,2025-06-16 17:42:16,"",,生成操作
+27,9,清空数据,9,sys_oper_type,"",danger,N,0,admin,2025-06-16 17:42:16,"",,清空操作
+28,1,成功,0,sys_common_status,"",primary,N,0,admin,2025-06-16 17:42:16,"",,正常状态
+29,2,失败,1,sys_common_status,"",danger,N,0,admin,2025-06-16 17:42:16,"",,停用状态
+30,0,白名单,0,lab_face_group,,default,N,0,admin,2025-07-11 02:09:46,"",,
+31,1,访客,1,lab_face_group,,default,N,0,admin,2025-07-11 02:10:00,"",,
+32,2,黑名单,2,lab_face_group,,default,N,0,admin,2025-07-11 02:10:12,"",,
+33,0,企业微信群推送,0,alarm_level,,default,N,0,admin,2025-07-11 13:16:19,"",,
+34,1,钉钉群推送,1,alarm_level,,default,N,0,admin,2025-07-11 13:16:39,"",,
+35,2,短信推送,2,alarm_level,,default,N,0,admin,2025-07-11 13:16:51,"",,
+36,3,语音推送,3,alarm_level,,default,N,0,admin,2025-07-11 13:17:03,"",,
+37,4,接口推送,4,alarm_level,,default,N,0,admin,2025-07-11 13:17:16,"",,
+38,0,英伟达,0,algorithm_platform,,default,N,0,admin,2025-07-12 01:44:48,"",,
+39,1,昇腾,1,algorithm_platform,,default,N,0,admin,2025-07-12 01:45:00,"",,
+40,2,算能,2,algorithm_platform,,default,N,0,admin,2025-07-12 01:45:08,"",,
+41,0,教学楼,0,building_type,,default,N,0,admin,2025-07-12 11:17:47,"",,
+42,1,实验楼,1,building_type,,default,N,0,admin,2025-07-12 11:17:56,"",,
+43,2,工学楼,2,building_type,,default,N,0,admin,2025-07-12 11:18:04,admin,2025-07-12 11:32:16,
+44,3,行政楼,3,building_type,,default,N,0,admin,2025-07-12 11:18:16,admin,2025-07-12 11:32:21,
+45,4,综合楼,4,building_type,,default,N,0,admin,2025-07-12 11:18:25,admin,2025-07-12 11:32:27,
+46,5,图书馆,5,building_type,,default,N,0,admin,2025-07-12 11:18:35,admin,2025-07-12 11:32:32,
+47,6,食堂,6,building_type,,default,N,0,admin,2025-07-12 11:18:44,admin,2025-07-12 11:32:39,
+48,7,学生公寓,7,building_type,,default,N,0,admin,2025-07-12 11:18:55,admin,2025-07-12 11:32:47,
+49,8,教师公寓,8,building_type,,default,N,0,admin,2025-07-12 11:19:05,admin,2025-07-12 11:32:55,
+50,0,教学室,0,room_type,,default,N,0,admin,2025-07-12 12:03:40,"",,
+51,1,科研室,1,room_type,,default,N,0,admin,2025-07-12 12:03:52,"",,
+52,2,会议室,2,room_type,,default,N,0,admin,2025-07-12 12:04:01,"",,
+53,3,办公室,3,room_type,,default,N,0,admin,2025-07-12 12:04:19,admin,2025-07-12 12:04:43,
+54,4,图书室,4,room_type,,default,N,0,admin,2025-07-12 12:04:33,admin,2025-07-12 12:04:48,
+55,5,阅览室,5,room_type,,default,N,0,admin,2025-07-12 12:05:02,admin,2025-07-12 12:05:07,
+56,6,接待室,6,room_type,,default,N,0,admin,2025-07-12 12:05:26,"",,
+57,7,档案窒,7,room_type,,default,N,0,admin,2025-07-12 12:05:36,"",,
+58,8,怃证就度料室,8,room_type,,default,N,0,admin,2025-07-12 12:05:44,"",,
+59,9,财务处,9,room_type,,default,N,0,admin,2025-07-12 12:05:53,"",,
+60,10,设备处,10,room_type,,default,N,0,admin,2025-07-12 12:06:04,"",,
+61,0,计算机科学与技术,0,student_major,,default,N,0,admin,2025-07-18 13:10:45,"",,
+62,1,软件工程,1,student_major,,default,N,0,admin,2025-07-18 13:10:53,"",,
+63,2,大数据,2,student_major,,default,N,0,admin,2025-07-18 13:11:06,"",,
+64,3,人工智能,3,student_major,,default,N,0,admin,2025-07-18 13:11:21,"",,
+65,4,网络工程,4,student_major,,default,N,0,admin,2025-07-18 13:12:18,"",,
+66,5,信息安全,5,student_major,,default,N,0,admin,2025-07-18 13:12:29,"",,
+67,0,2020届,0,student_grade,,default,N,0,admin,2025-07-18 13:13:17,"",,
+68,1,2021届,1,student_grade,,default,N,0,admin,2025-07-18 13:13:24,"",,
+69,2,2022届,2,student_grade,,default,N,0,admin,2025-07-18 13:14:20,"",,
+70,3,2023届,3,student_grade,,default,N,0,admin,2025-07-18 13:14:29,"",,
+71,4,2024届,4,student_grade,,default,N,0,admin,2025-07-18 13:14:36,"",,
+72,5,2025届,5,student_grade,,default,N,0,admin,2025-07-18 13:14:46,"",,
+73,0,01班,0,student_class,,default,N,0,admin,2025-07-18 13:16:05,"",,
+74,1,02班,1,student_class,,default,N,0,admin,2025-07-18 13:16:11,"",,
+75,2,03班,2,student_class,,default,N,0,admin,2025-07-18 13:16:19,"",,
+76,3,04班,3,student_class,,default,N,0,admin,2025-07-18 13:16:28,"",,
+77,4,05班,4,student_class,,default,N,0,admin,2025-07-18 13:16:34,"",,
+78,5,06班,5,student_class,,default,N,0,admin,2025-07-18 13:16:43,"",,
+79,6,07班,6,student_class,,default,N,0,admin,2025-07-18 13:16:51,"",,
+80,7,08班,7,student_class,,default,N,0,admin,2025-07-18 13:17:01,"",,
+81,8,09班,8,student_class,,default,N,0,admin,2025-07-18 13:17:08,"",,
+82,9,10班,9,student_class,,default,N,0,admin,2025-07-18 13:17:17,"",,
+83,10,11班,10,student_class,,default,N,0,admin,2025-07-18 13:17:24,"",,
+84,11,12班,11,student_class,,default,N,0,admin,2025-07-18 13:18:08,"",,
+85,12,13班,12,student_class,,default,N,0,admin,2025-07-18 13:18:17,"",,
+86,13,14班,13,student_class,,default,N,0,admin,2025-07-18 13:18:26,"",,
+87,14,15班,14,student_class,,default,N,0,admin,2025-07-18 13:18:34,"",,
+88,15,16班,15,student_class,,default,N,0,admin,2025-07-18 13:18:43,"",,
+89,16,17班,16,student_class,,default,N,0,admin,2025-07-18 13:18:50,"",,
+90,17,18班,17,student_class,,default,N,0,admin,2025-07-18 13:18:57,"",,
+91,18,19班,18,student_class,,default,N,0,admin,2025-07-18 13:19:10,"",,
+92,19,20班,19,student_class,,default,N,0,admin,2025-07-18 13:19:17,"",,

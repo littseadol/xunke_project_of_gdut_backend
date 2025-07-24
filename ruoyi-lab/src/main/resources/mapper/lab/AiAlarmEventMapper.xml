@@ -1,0 +1,96 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ruoyi.lab.mapper.AiAlarmEventMapper">
+    
+    <resultMap type="AiAlarmEvent" id="AiAlarmEventResult">
+        <result property="eventId"    column="event_id"    />
+        <result property="alarmPicture"    column="alarm_picture"    />
+        <result property="alarmVideo"    column="alarm_video"    />
+        <result property="deviceId"    column="device_id"    />
+        <result property="eventType"    column="event_type"    />
+        <result property="eventLevel"    column="event_level"    />
+        <result property="eventStatus"    column="event_status"    />
+        <result property="handleTime"    column="handle_time"    />
+        <result property="handleOpinion"    column="handle_opinion"    />
+        <result property="createTime"    column="create_time"    />
+    </resultMap>
+
+    <sql id="selectAiAlarmEventVo">
+        select event_id, alarm_picture, alarm_video, device_id, event_type, event_level, event_status, handle_time, handle_opinion, create_time from ai_alarm_event
+    </sql>
+
+    <select id="selectAiAlarmEventList" parameterType="AiAlarmEvent" resultMap="AiAlarmEventResult">
+        <include refid="selectAiAlarmEventVo"/>
+        <where>  
+            <if test="alarmPicture != null  and alarmPicture != ''"> and alarm_picture like concat('%', #{alarmPicture}, '%')</if>
+            <if test="alarmVideo != null  and alarmVideo != ''"> and alarm_video like concat('%', #{alarmVideo}, '%')</if>
+            <if test="deviceId != null "> and device_id = #{deviceId}</if>
+            <if test="eventType != null "> and event_type = #{eventType}</if>
+            <if test="eventLevel != null "> and event_level = #{eventLevel}</if>
+            <if test="eventStatus != null "> and event_status = #{eventStatus}</if>
+            <if test="params.beginHandleTime != null and params.beginHandleTime != '' and params.endHandleTime != null and params.endHandleTime != ''"> and handle_time between #{params.beginHandleTime} and #{params.endHandleTime}</if>
+            <if test="handleOpinion != null  and handleOpinion != ''"> and handle_opinion like concat('%', #{handleOpinion}, '%')</if>
+            <if test="params.beginCreateTime != null and params.beginCreateTime != '' and params.endCreateTime != null and params.endCreateTime != ''"> and create_time between #{params.beginCreateTime} and #{params.endCreateTime}</if>
+        </where>
+    </select>
+    
+    <select id="selectAiAlarmEventByEventId" parameterType="Long" resultMap="AiAlarmEventResult">
+        <include refid="selectAiAlarmEventVo"/>
+        where event_id = #{eventId}
+    </select>
+
+    <insert id="insertAiAlarmEvent" parameterType="AiAlarmEvent" useGeneratedKeys="true" keyProperty="eventId">
+        insert into ai_alarm_event
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="alarmPicture != null">alarm_picture,</if>
+            <if test="alarmVideo != null">alarm_video,</if>
+            <if test="deviceId != null">device_id,</if>
+            <if test="eventType != null">event_type,</if>
+            <if test="eventLevel != null">event_level,</if>
+            <if test="eventStatus != null">event_status,</if>
+            <if test="handleTime != null">handle_time,</if>
+            <if test="handleOpinion != null">handle_opinion,</if>
+            <if test="createTime != null">create_time,</if>
+         </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="alarmPicture != null">#{alarmPicture},</if>
+            <if test="alarmVideo != null">#{alarmVideo},</if>
+            <if test="deviceId != null">#{deviceId},</if>
+            <if test="eventType != null">#{eventType},</if>
+            <if test="eventLevel != null">#{eventLevel},</if>
+            <if test="eventStatus != null">#{eventStatus},</if>
+            <if test="handleTime != null">#{handleTime},</if>
+            <if test="handleOpinion != null">#{handleOpinion},</if>
+            <if test="createTime != null">#{createTime},</if>
+         </trim>
+    </insert>
+
+    <update id="updateAiAlarmEvent" parameterType="AiAlarmEvent">
+        update ai_alarm_event
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="alarmPicture != null">alarm_picture = #{alarmPicture},</if>
+            <if test="alarmVideo != null">alarm_video = #{alarmVideo},</if>
+            <if test="deviceId != null">device_id = #{deviceId},</if>
+            <if test="eventType != null">event_type = #{eventType},</if>
+            <if test="eventLevel != null">event_level = #{eventLevel},</if>
+            <if test="eventStatus != null">event_status = #{eventStatus},</if>
+            <if test="handleTime != null">handle_time = #{handleTime},</if>
+            <if test="handleOpinion != null">handle_opinion = #{handleOpinion},</if>
+            <if test="createTime != null">create_time = #{createTime},</if>
+        </trim>
+        where event_id = #{eventId}
+    </update>
+
+    <delete id="deleteAiAlarmEventByEventId" parameterType="Long">
+        delete from ai_alarm_event where event_id = #{eventId}
+    </delete>
+
+    <delete id="deleteAiAlarmEventByEventIds" parameterType="String">
+        delete from ai_alarm_event where event_id in 
+        <foreach item="eventId" collection="array" open="(" separator="," close=")">
+            #{eventId}
+        </foreach>
+    </delete>
+</mapper>

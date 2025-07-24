@@ -1,0 +1,155 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ruoyi.lab.mapper.AiClassScheduleMapper">
+    
+    <resultMap type="AiClassSchedule" id="AiClassScheduleResult">
+        <result property="scheduleId"    column="schedule_id"    />
+        <result property="academicYear"    column="academic_year"    />
+        <result property="weekNum"    column="week_num"    />
+        <result property="collegeName"    column="college_name"    />
+        <result property="majorName"    column="major_name"    />
+        <result property="grade"    column="grade"    />
+        <result property="className"    column="class_name"    />
+        <result property="courseName"    column="course_name"    />
+        <result property="teacherName"    column="teacher_name"    />
+        <result property="weekday"    column="weekday"    />
+        <result property="section"    column="section"    />
+        <result property="location"    column="location"    />
+        <result property="scheduleDate"    column="schedule_date"    />
+        <result property="courseOrder"    column="course_order"    />
+        <result property="courseType"    column="course_type"    />
+        <result property="courseDesc"    column="course_desc"    />
+        <result property="credits"    column="credits"    />
+        <result property="studentCount"    column="student_count"    />
+        <result property="status"    column="status"    />
+        <result property="delFlag"    column="del_flag"    />
+        <result property="createBy"    column="create_by"    />
+        <result property="createTime"    column="create_time"    />
+        <result property="updateBy"    column="update_by"    />
+        <result property="updateTime"    column="update_time"    />
+        <result property="remark"    column="remark"    />
+    </resultMap>
+
+    <sql id="selectAiClassScheduleVo">
+        select schedule_id, academic_year, week_num, college_name, major_name, grade, class_name, course_name, teacher_name, weekday, section, location, schedule_date, course_order, course_type, course_desc, credits, student_count, status, del_flag, create_by, create_time, update_by, update_time, remark from ai_class_schedule
+    </sql>
+
+    <select id="selectAiClassScheduleList" parameterType="AiClassSchedule" resultMap="AiClassScheduleResult">
+        <include refid="selectAiClassScheduleVo"/>
+        <where>  
+            <if test="academicYear != null  and academicYear != ''"> and academic_year like concat('%', #{academicYear}, '%')</if>
+            <if test="weekNum != null "> and week_num = #{weekNum}</if>
+            <if test="collegeName != null  and collegeName != ''"> and college_name like concat('%', #{collegeName}, '%')</if>
+            <if test="majorName != null  and majorName != ''"> and major_name like concat('%', #{majorName}, '%')</if>
+            <if test="grade != null  and grade != ''"> and grade = #{grade}</if>
+            <if test="className != null  and className != ''"> and class_name like concat('%', #{className}, '%')</if>
+            <if test="courseName != null  and courseName != ''"> and course_name like concat('%', #{courseName}, '%')</if>
+            <if test="teacherName != null  and teacherName != ''"> and teacher_name like concat('%', #{teacherName}, '%')</if>
+        </where>
+    </select>
+    
+    <select id="selectAiClassScheduleByScheduleId" parameterType="Long" resultMap="AiClassScheduleResult">
+        <include refid="selectAiClassScheduleVo"/>
+        where schedule_id = #{scheduleId}
+    </select>
+
+    <insert id="insertAiClassSchedule" parameterType="AiClassSchedule" useGeneratedKeys="true" keyProperty="scheduleId">
+        insert into ai_class_schedule
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="academicYear != null and academicYear != ''">academic_year,</if>
+            <if test="weekNum != null">week_num,</if>
+            <if test="collegeName != null and collegeName != ''">college_name,</if>
+            <if test="majorName != null and majorName != ''">major_name,</if>
+            <if test="grade != null and grade != ''">grade,</if>
+            <if test="className != null and className != ''">class_name,</if>
+            <if test="courseName != null and courseName != ''">course_name,</if>
+            <if test="teacherName != null and teacherName != ''">teacher_name,</if>
+            <if test="weekday != null">weekday,</if>
+            <if test="section != null and section != ''">section,</if>
+            <if test="location != null and location != ''">location,</if>
+            <if test="scheduleDate != null">schedule_date,</if>
+            <if test="courseOrder != null">course_order,</if>
+            <if test="courseType != null">course_type,</if>
+            <if test="courseDesc != null">course_desc,</if>
+            <if test="credits != null">credits,</if>
+            <if test="studentCount != null">student_count,</if>
+            <if test="status != null">status,</if>
+            <if test="delFlag != null">del_flag,</if>
+            <if test="createBy != null">create_by,</if>
+            <if test="createTime != null">create_time,</if>
+            <if test="updateBy != null">update_by,</if>
+            <if test="updateTime != null">update_time,</if>
+            <if test="remark != null">remark,</if>
+         </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="academicYear != null and academicYear != ''">#{academicYear},</if>
+            <if test="weekNum != null">#{weekNum},</if>
+            <if test="collegeName != null and collegeName != ''">#{collegeName},</if>
+            <if test="majorName != null and majorName != ''">#{majorName},</if>
+            <if test="grade != null and grade != ''">#{grade},</if>
+            <if test="className != null and className != ''">#{className},</if>
+            <if test="courseName != null and courseName != ''">#{courseName},</if>
+            <if test="teacherName != null and teacherName != ''">#{teacherName},</if>
+            <if test="weekday != null">#{weekday},</if>
+            <if test="section != null and section != ''">#{section},</if>
+            <if test="location != null and location != ''">#{location},</if>
+            <if test="scheduleDate != null">#{scheduleDate},</if>
+            <if test="courseOrder != null">#{courseOrder},</if>
+            <if test="courseType != null">#{courseType},</if>
+            <if test="courseDesc != null">#{courseDesc},</if>
+            <if test="credits != null">#{credits},</if>
+            <if test="studentCount != null">#{studentCount},</if>
+            <if test="status != null">#{status},</if>
+            <if test="delFlag != null">#{delFlag},</if>
+            <if test="createBy != null">#{createBy},</if>
+            <if test="createTime != null">#{createTime},</if>
+            <if test="updateBy != null">#{updateBy},</if>
+            <if test="updateTime != null">#{updateTime},</if>
+            <if test="remark != null">#{remark},</if>
+         </trim>
+    </insert>
+
+    <update id="updateAiClassSchedule" parameterType="AiClassSchedule">
+        update ai_class_schedule
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="academicYear != null and academicYear != ''">academic_year = #{academicYear},</if>
+            <if test="weekNum != null">week_num = #{weekNum},</if>
+            <if test="collegeName != null and collegeName != ''">college_name = #{collegeName},</if>
+            <if test="majorName != null and majorName != ''">major_name = #{majorName},</if>
+            <if test="grade != null and grade != ''">grade = #{grade},</if>
+            <if test="className != null and className != ''">class_name = #{className},</if>
+            <if test="courseName != null and courseName != ''">course_name = #{courseName},</if>
+            <if test="teacherName != null and teacherName != ''">teacher_name = #{teacherName},</if>
+            <if test="weekday != null">weekday = #{weekday},</if>
+            <if test="section != null and section != ''">section = #{section},</if>
+            <if test="location != null and location != ''">location = #{location},</if>
+            <if test="scheduleDate != null">schedule_date = #{scheduleDate},</if>
+            <if test="courseOrder != null">course_order = #{courseOrder},</if>
+            <if test="courseType != null">course_type = #{courseType},</if>
+            <if test="courseDesc != null">course_desc = #{courseDesc},</if>
+            <if test="credits != null">credits = #{credits},</if>
+            <if test="studentCount != null">student_count = #{studentCount},</if>
+            <if test="status != null">status = #{status},</if>
+            <if test="delFlag != null">del_flag = #{delFlag},</if>
+            <if test="createBy != null">create_by = #{createBy},</if>
+            <if test="createTime != null">create_time = #{createTime},</if>
+            <if test="updateBy != null">update_by = #{updateBy},</if>
+            <if test="updateTime != null">update_time = #{updateTime},</if>
+            <if test="remark != null">remark = #{remark},</if>
+        </trim>
+        where schedule_id = #{scheduleId}
+    </update>
+
+    <delete id="deleteAiClassScheduleByScheduleId" parameterType="Long">
+        delete from ai_class_schedule where schedule_id = #{scheduleId}
+    </delete>
+
+    <delete id="deleteAiClassScheduleByScheduleIds" parameterType="String">
+        delete from ai_class_schedule where schedule_id in 
+        <foreach item="scheduleId" collection="array" open="(" separator="," close=")">
+            #{scheduleId}
+        </foreach>
+    </delete>
+</mapper>

@@ -1,0 +1,145 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ruoyi.lab.mapper.AiRoomMapper">
+    
+    <resultMap type="AiRoom" id="AiRoomResult">
+        <result property="roomId"    column="room_id"    />
+        <result property="roomName"    column="room_name"    />
+        <result property="roomType"    column="room_type"    />
+        <result property="buildingId"    column="building_id"    />
+        <result property="buildingName"    column="building_name"    />
+        <result property="buildingFloor"    column="building_floor"    />
+        <result property="teamId"    column="team_id"    />
+        <result property="teamName"    column="team_name"    />
+        <result property="chargeName"    column="charge_name"    />
+        <result property="chargePhone"    column="charge_phone"    />
+        <result property="chargeWorkNumber"    column="charge_work_number"    />
+        <result property="createTime"    column="create_time"    />
+    </resultMap>
+
+    <sql id="selectAiRoomVo">
+        select ai_room.room_id,
+               room_name,
+               room_type,
+               ai_room.charge_name,
+               ai_room.charge_phone,
+               ai_room.charge_work_number,
+               ai_room.create_time,
+               ai_building.building_id,
+               building_name,
+               building_floor,
+               ai_team.team_id,
+               team_name
+        from ai_room
+                 left join ai_room_building on ai_room.room_id = ai_room_building.room_id
+                 left join ai_building on ai_building.building_id = ai_room_building.building_id
+                 left join ai_room_team on ai_room.room_id = ai_room_team.room_id
+                 left join ai_team on ai_team.team_id = ai_room_team.team_id
+    </sql>
+
+    <select id="selectAiRoomList" parameterType="AiRoom" resultMap="AiRoomResult">
+        <include refid="selectAiRoomVo"/>
+        <where>  
+            <if test="roomName != null  and roomName != ''"> and room_name like concat('%', #{roomName}, '%')</if>
+            <if test="buildingName != null  and buildingName != ''"> and building_name like concat('%', #{buildingName}, '%')</if>
+            <if test="teamName != null  and teamName != ''"> and team_name like concat('%', #{teamName}, '%')</if>
+            <if test="roomType != null "> and room_type = #{roomType}</if>
+            <if test="buildingFloor != null "> and building_floor = #{buildingFloor}</if>
+            <if test="chargeName != null  and chargeName != ''"> and charge_name like concat('%', #{chargeName}, '%')</if>
+            <if test="chargePhone != null  and chargePhone != ''"> and charge_phone like concat('%', #{chargePhone}, '%')</if>
+            <if test="chargeWorkNumber != null  and chargeWorkNumber != ''"> and charge_work_number like concat('%', #{chargeWorkNumber}, '%')</if>
+            <if test="params.beginCreateTime != null and params.beginCreateTime != '' and params.endCreateTime != null and params.endCreateTime != ''"> and create_time between #{params.beginCreateTime} and #{params.endCreateTime}</if>
+        </where>
+    </select>
+
+    <select id="selectUnrelatedRoomList" resultMap="AiRoomResult">
+        <include refid="selectAiRoomVo"/>
+        where ai_room.room_id not in (select room_id from ai_room_team)
+    </select>
+    
+    <select id="selectAiRoomByRoomId" parameterType="Long" resultMap="AiRoomResult">
+        <include refid="selectAiRoomVo"/>
+        where ai_room.room_id = #{roomId}
+    </select>
+
+    <!--  添加房间  -->
+    <insert id="insertAiRoom" parameterType="AiRoom" useGeneratedKeys="true" keyProperty="roomId">
+        insert into ai_room
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="roomName != null and roomName != ''">room_name,</if>
+            <if test="roomType != null">room_type,</if>
+            <if test="chargeName != null and chargeName != ''">charge_name,</if>
+            <if test="chargePhone != null and chargePhone != ''">charge_phone,</if>
+            <if test="chargeWorkNumber != null and chargeWorkNumber != ''">charge_work_number,</if>
+            <if test="createTime != null">create_time,</if>
+         </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="roomName != null and roomName != ''">#{roomName},</if>
+            <if test="roomType != null">#{roomType},</if>
+            <if test="chargeName != null and chargeName != ''">#{chargeName},</if>
+            <if test="chargePhone != null and chargePhone != ''">#{chargePhone},</if>
+            <if test="chargeWorkNumber != null and chargeWorkNumber != ''">#{chargeWorkNumber},</if>
+            <if test="createTime != null">#{createTime},</if>
+         </trim>
+    </insert>
+    <insert id="insertRoomBuilding">
+        insert into ai_room_building(room_id, building_id, building_floor)values(#{roomId}, #{buildingId}, #{buildingFloor})
+    </insert>
+
+    <!--  修改房间  -->
+    <update id="updateAiRoom" parameterType="AiRoom">
+        update ai_room
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="roomName != null and roomName != ''">room_name = #{roomName},</if>
+            <if test="roomType != null">room_type = #{roomType},</if>
+            <if test="chargeName != null and chargeName != ''">charge_name = #{chargeName},</if>
+            <if test="chargePhone != null and chargePhone != ''">charge_phone = #{chargePhone},</if>
+            <if test="chargeWorkNumber != null and chargeWorkNumber != ''">charge_work_number = #{chargeWorkNumber},</if>
+            <if test="createTime != null">create_time = #{createTime},</if>
+        </trim>
+        where room_id = #{roomId}
+    </update>
+    <update id="updateRoomBuilding">
+        update ai_room_building set building_id = #{buildingId}, building_floor = #{buildingFloor} where room_id = #{roomId}
+    </update>
+
+    <!--  删除房间  -->
+    <delete id="deleteAiRoomByRoomId" parameterType="Long">
+        delete from ai_room where room_id = #{roomId}
+    </delete>
+    <delete id="deleteRoomBuildingByRoomId">
+        delete from ai_room_building where room_id = #{roomId}
+    </delete>
+
+    <!--  批量删除房间  -->
+    <delete id="deleteAiRoomByRoomIds" parameterType="String">
+        delete from ai_room where room_id in 
+        <foreach item="roomId" collection="array" open="(" separator="," close=")">
+            #{roomId}
+        </foreach>
+    </delete>
+    <delete id="deleteRoomBuildingByRoomIds" parameterType="String">
+        delete from ai_room_building where room_id in
+        <foreach item="roomId" collection="array" open="(" separator="," close=")">
+            #{roomId}
+        </foreach>
+    </delete>
+
+    <!--  绑定团队  -->
+    <select id="selectRoomTeamCountByRoomId" resultType="int">
+        select count(*) from ai_room_team where room_id = #{roomId}
+    </select>
+    <insert id="insertRoomTeam">
+        insert into ai_room_team(room_id, team_id)values(#{roomId}, #{teamId})
+    </insert>
+    <update id="updateRoomTeam">
+        update ai_room_team set team_id = #{teamId} where room_id = #{roomId}
+    </update>
+
+    <select id="selectCount" resultType="int">
+        select count(*) from ai_room
+    </select>
+
+</mapper>
