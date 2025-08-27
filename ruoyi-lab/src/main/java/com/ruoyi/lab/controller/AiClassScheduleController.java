@@ -2,6 +2,8 @@ package com.ruoyi.lab.controller;
 
 import java.util.List;
 import javax.servlet.http.HttpServletResponse;
+
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -22,11 +24,12 @@ import com.ruoyi.common.utils.poi.ExcelUtil;
 import com.ruoyi.common.core.page.TableDataInfo;
 
 /**
- * 班级课信息Controller
+ * 排课信息Controller
  * 
  * @author Ldolphin
- * @date 2025-07-22
+ * @date 2025-07-24
  */
+@Slf4j
 @RestController
 @RequestMapping("/lab/classSchedule")
 public class AiClassScheduleController extends BaseController
@@ -35,7 +38,7 @@ public class AiClassScheduleController extends BaseController
     private IAiClassScheduleService aiClassScheduleService;
 
     /**
-     * 查询班级课信息列表
+     * 查询排课信息列表
      */
     @PreAuthorize("@ss.hasPermi('lab:classSchedule:list')")
     @GetMapping("/list")
@@ -47,20 +50,20 @@ public class AiClassScheduleController extends BaseController
     }
 
     /**
-     * 导出班级课信息列表
+     * 导出排课信息列表
      */
     @PreAuthorize("@ss.hasPermi('lab:classSchedule:export')")
-    @Log(title = "班级课信息", businessType = BusinessType.EXPORT)
+    @Log(title = "排课信息", businessType = BusinessType.EXPORT)
     @PostMapping("/export")
     public void export(HttpServletResponse response, AiClassSchedule aiClassSchedule)
     {
         List<AiClassSchedule> list = aiClassScheduleService.selectAiClassScheduleList(aiClassSchedule);
         ExcelUtil<AiClassSchedule> util = new ExcelUtil<AiClassSchedule>(AiClassSchedule.class);
-        util.exportExcel(response, list, "班级课信息数据");
+        util.exportExcel(response, list, "排课信息数据");
     }
 
     /**
-     * 获取班级课信息详细信息
+     * 获取排课信息详细信息
      */
     @PreAuthorize("@ss.hasPermi('lab:classSchedule:query')")
     @GetMapping(value = "/{scheduleId}")
@@ -70,10 +73,10 @@ public class AiClassScheduleController extends BaseController
     }
 
     /**
-     * 新增班级课信息
+     * 新增排课信息
      */
     @PreAuthorize("@ss.hasPermi('lab:classSchedule:add')")
-    @Log(title = "班级课信息", businessType = BusinessType.INSERT)
+    @Log(title = "排课信息", businessType = BusinessType.INSERT)
     @PostMapping
     public AjaxResult add(@RequestBody AiClassSchedule aiClassSchedule)
     {
@@ -81,10 +84,10 @@ public class AiClassScheduleController extends BaseController
     }
 
     /**
-     * 修改班级课信息
+     * 修改排课信息
      */
     @PreAuthorize("@ss.hasPermi('lab:classSchedule:edit')")
-    @Log(title = "班级课信息", businessType = BusinessType.UPDATE)
+    @Log(title = "排课信息", businessType = BusinessType.UPDATE)
     @PutMapping
     public AjaxResult edit(@RequestBody AiClassSchedule aiClassSchedule)
     {
@@ -92,10 +95,10 @@ public class AiClassScheduleController extends BaseController
     }
 
     /**
-     * 删除班级课信息
+     * 删除排课信息
      */
     @PreAuthorize("@ss.hasPermi('lab:classSchedule:remove')")
-    @Log(title = "班级课信息", businessType = BusinessType.DELETE)
+    @Log(title = "排课信息", businessType = BusinessType.DELETE)
 	@DeleteMapping("/{scheduleIds}")
     public AjaxResult remove(@PathVariable Long[] scheduleIds)
     {

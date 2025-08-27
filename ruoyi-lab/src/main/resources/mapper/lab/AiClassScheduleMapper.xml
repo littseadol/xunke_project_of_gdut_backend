@@ -30,10 +30,12 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         <result property="updateBy"    column="update_by"    />
         <result property="updateTime"    column="update_time"    />
         <result property="remark"    column="remark"    />
+        <result property="startTime"    column="start_time"    />
+        <result property="endTime"    column="end_time"    />
     </resultMap>
 
     <sql id="selectAiClassScheduleVo">
-        select schedule_id, academic_year, week_num, college_name, major_name, grade, class_name, course_name, teacher_name, weekday, section, location, schedule_date, course_order, course_type, course_desc, credits, student_count, status, del_flag, create_by, create_time, update_by, update_time, remark from ai_class_schedule
+        select schedule_id, academic_year, week_num, college_name, major_name, grade, class_name, course_name, teacher_name, weekday, section, location, schedule_date, course_order, course_type, course_desc, credits, student_count, status, del_flag, create_by, create_time, update_by, update_time, remark, start_time, end_time from ai_class_schedule
     </sql>
 
     <select id="selectAiClassScheduleList" parameterType="AiClassSchedule" resultMap="AiClassScheduleResult">
@@ -47,6 +49,10 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
             <if test="className != null  and className != ''"> and class_name like concat('%', #{className}, '%')</if>
             <if test="courseName != null  and courseName != ''"> and course_name like concat('%', #{courseName}, '%')</if>
             <if test="teacherName != null  and teacherName != ''"> and teacher_name like concat('%', #{teacherName}, '%')</if>
+            <if test="weekday != null "> and weekday = #{weekday}</if>
+            <if test="section != null  and section != ''"> and section = #{section}</if>
+            <if test="location != null  and location != ''"> and location like concat('%', #{location}, '%')</if>
+            <if test="scheduleDate != null "> and schedule_date like concat('%', #{scheduleDate}, '%')</if>
         </where>
     </select>
     
@@ -82,6 +88,8 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
             <if test="updateBy != null">update_by,</if>
             <if test="updateTime != null">update_time,</if>
             <if test="remark != null">remark,</if>
+            <if test="startTime != null">start_time,</if>
+            <if test="endTime != null">end_time,</if>
          </trim>
         <trim prefix="values (" suffix=")" suffixOverrides=",">
             <if test="academicYear != null and academicYear != ''">#{academicYear},</if>
@@ -108,6 +116,8 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
             <if test="updateBy != null">#{updateBy},</if>
             <if test="updateTime != null">#{updateTime},</if>
             <if test="remark != null">#{remark},</if>
+            <if test="startTime != null">#{startTime},</if>
+            <if test="endTime != null">#{endTime},</if>
          </trim>
     </insert>
 
@@ -138,6 +148,8 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
             <if test="updateBy != null">update_by = #{updateBy},</if>
             <if test="updateTime != null">update_time = #{updateTime},</if>
             <if test="remark != null">remark = #{remark},</if>
+            <if test="startTime != null">start_time = #{startTime},</if>
+            <if test="endTime != null">end_time = #{endTime},</if>
         </trim>
         where schedule_id = #{scheduleId}
     </update>

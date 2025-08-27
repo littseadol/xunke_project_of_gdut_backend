@@ -4,6 +4,7 @@ import com.ruoyi.lab.domain.AiDevice;
 import com.ruoyi.lab.domain.AiDeviceAlgorithm;
 import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Param;
+import org.apache.ibatis.annotations.Select;
 
 import java.util.List;
 
@@ -36,4 +37,10 @@ public interface AiDeviceMapper {
 
     // 更新坐标
     public int updateCoordinate(AiDevice aiDevice);
+
+    @Select("SELECT g.group_name " +
+            "FROM ai_device_group dg " +
+            "JOIN ai_group g ON dg.group_id = g.group_id " +
+            "WHERE dg.device_id = #{deviceId}")
+    public String getLocationByDeviceId(@Param("deviceId") Long deviceId);
 }
