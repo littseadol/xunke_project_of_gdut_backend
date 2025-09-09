@@ -59,9 +59,9 @@ spring:
   servlet:
     multipart:
       # 单个文件大小
-      max-file-size: 10MB
+      max-file-size: 50MB
       # 设置总上传的文件大小
-      max-request-size: 20MB
+      max-request-size: 50MB
   # 服务模块
   devtools:
     restart:
@@ -141,7 +141,7 @@ minio:
   endpoint: http://10.21.49.68:30923
   access-key: 7uc5GfhK1z4395cX9y0s
   secret-key: dvrcE6tKpSTwjVpbcPKROTlXesGxX6vEoeorFsN1
-  bucket-name: ai-video-monitor-platform
+  bucket-name: ai-video-education-platform
   algorithm-mall-picture: algorithm-mall-picture
 
 # 使用ffmpeg从rtsp流获取一张图片
@@ -168,4 +168,19 @@ smartJavaAI:
   elasticFaceModelPath: C:/Users/Administrator/Downloads/ElasticFace/elasticface.pt
   cachePath: C:/Users/Ldolphin/Desktop/temp
 
+# whisper语音转写服务21
+whisper:
+  server:
+    url: http://localhost:9090
+    endpoint: /asr
+    default-language: zh
+    default-output: txt
+    default-task: transcribe
+
+# 知识库
+knowledge:
+  base:
+    file-path: knowledge-base.txt
+    cache-enabled: true
+    reload-on-startup: true
 

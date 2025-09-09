@@ -33,6 +33,7 @@
             <version>8.5.10</version>
         </dependency>
 
+        <!-- 人脸相关模块-->
         <dependency>
             <groupId>cn.smartjavaai</groupId>
             <artifactId>smartjavaai-all</artifactId>
@@ -44,7 +45,31 @@
                 </exclusion>
             </exclusions>
         </dependency>
-
+        <!--知识提取模块 -->
+        <!-- Stanford CoreNLP -->
+        <dependency>
+            <groupId>edu.stanford.nlp</groupId>
+            <artifactId>stanford-corenlp</artifactId>
+            <version>4.5.0</version>
+        </dependency>
+        <dependency>
+            <groupId>edu.stanford.nlp</groupId>
+            <artifactId>stanford-corenlp</artifactId>
+            <version>4.5.0</version>
+            <classifier>models</classifier>
+        </dependency>
+        <dependency>
+            <groupId>edu.stanford.nlp</groupId>
+            <artifactId>stanford-corenlp</artifactId>
+            <version>4.5.0</version>
+            <classifier>models-chinese</classifier>
+        </dependency>
+        <!-- pom.xml -->
+        <dependency>
+            <groupId>com.hankcs</groupId>
+            <artifactId>hanlp</artifactId>
+            <version>portable-1.8.3</version>
+        </dependency>
     </dependencies>
     <build>
         <plugins>
