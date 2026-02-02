@@ -7,6 +7,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
     <resultMap type="AiVideoEvaluation" id="AiVideoEvaluationResult">
         <result property="id"    column="id"    />
         <result property="deviceId"    column="device_id"    />
+        <result property="scheduleId"    column="schedule_id"    />
         <result property="score"    column="score"    />
         <result property="content"    column="content"    />
         <result property="suggestion"    column="suggestion"    />
@@ -20,13 +21,14 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
     </resultMap>
 
     <sql id="selectAiVideoEvaluationVo">
-        select id, device_id, score, content, suggestion, snapshot_path, snapshot_time, video_time, create_by, create_time, update_by, update_time from ai_video_evaluation
+        select id, device_id,schedule_id, score, content, suggestion, snapshot_path, snapshot_time, video_time, create_by, create_time, update_by, update_time from ai_video_evaluation
     </sql>
 
     <select id="selectAiVideoEvaluationList" parameterType="AiVideoEvaluation" resultMap="AiVideoEvaluationResult">
         <include refid="selectAiVideoEvaluationVo"/>
         <where>  
             <if test="deviceId != null  and deviceId != ''"> and device_id = #{deviceId}</if>
+            <if test="scheduleId != null  and scheduleId != ''"> and schedule_id = #{scheduleId}</if>
             <if test="score != null "> and score = #{score}</if>
             <if test="snapshotTime != null "> and snapshot_time = #{snapshotTime}</if>
             <if test="videoTime != null "> and video_time = #{videoTime}</if>
@@ -42,6 +44,15 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         insert into ai_video_evaluation
         <trim prefix="(" suffix=")" suffixOverrides=",">
             <if test="deviceId != null and deviceId != ''">device_id,</if>
+            <if test="scheduleId != null and scheduleId != ''">schedule_id,</if>
+            <!-- 新增的7个评分字段 -->
+            <if test="teachingObjectiveScore1 != null">teaching_objective_score1,</if>
+            <if test="teachingObjectiveScore2 != null">teaching_objective_score2,</if>
+            <if test="contentScore1 != null">content_score1,</if>
+            <if test="contentScore2 != null">content_score2,</if>
+            <if test="methodScore1 != null">method_score1,</if>
+            <if test="methodScore2 != null">method_score2,</if>
+            <if test="attitudeScore1 != null">attitude_score1,</if>
             <if test="score != null">score,</if>
             <if test="content != null and content != ''">content,</if>
             <if test="suggestion != null">suggestion,</if>
@@ -52,9 +63,18 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
             <if test="createTime != null">create_time,</if>
             <if test="updateBy != null">update_by,</if>
             <if test="updateTime != null">update_time,</if>
-         </trim>
+        </trim>
         <trim prefix="values (" suffix=")" suffixOverrides=",">
             <if test="deviceId != null and deviceId != ''">#{deviceId},</if>
+            <if test="scheduleId != null and scheduleId != ''">#{scheduleId},</if>
+            <!-- 新增的7个评分字段的值 -->
+            <if test="teachingObjectiveScore1 != null">#{teachingObjectiveScore1},</if>
+            <if test="teachingObjectiveScore2 != null">#{teachingObjectiveScore2},</if>
+            <if test="contentScore1 != null">#{contentScore1},</if>
+            <if test="contentScore2 != null">#{contentScore2},</if>
+            <if test="methodScore1 != null">#{methodScore1},</if>
+            <if test="methodScore2 != null">#{methodScore2},</if>
+            <if test="attitudeScore1 != null">#{attitudeScore1},</if>
             <if test="score != null">#{score},</if>
             <if test="content != null and content != ''">#{content},</if>
             <if test="suggestion != null">#{suggestion},</if>
@@ -65,7 +85,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
             <if test="createTime != null">#{createTime},</if>
             <if test="updateBy != null">#{updateBy},</if>
             <if test="updateTime != null">#{updateTime},</if>
-         </trim>
+        </trim>
     </insert>
 
     <update id="updateAiVideoEvaluation" parameterType="AiVideoEvaluation">

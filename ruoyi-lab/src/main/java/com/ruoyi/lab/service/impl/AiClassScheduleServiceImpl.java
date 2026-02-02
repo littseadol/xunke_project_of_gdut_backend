@@ -9,10 +9,10 @@ import com.ruoyi.lab.domain.AiClassSchedule;
 import com.ruoyi.lab.service.IAiClassScheduleService;
 
 /**
- * 班级课信息Service业务层处理
+ * 排课信息Service业务层处理
  * 
  * @author Ldolphin
- * @date 2025-07-22
+ * @date 2025-07-24
  */
 @Service
 public class AiClassScheduleServiceImpl implements IAiClassScheduleService 
@@ -21,10 +21,10 @@ public class AiClassScheduleServiceImpl implements IAiClassScheduleService
     private AiClassScheduleMapper aiClassScheduleMapper;
 
     /**
-     * 查询班级课信息
+     * 查询排课信息
      * 
-     * @param scheduleId 班级课信息主键
-     * @return 班级课信息
+     * @param scheduleId 排课信息主键
+     * @return 排课信息
      */
     @Override
     public AiClassSchedule selectAiClassScheduleByScheduleId(Long scheduleId)
@@ -33,10 +33,10 @@ public class AiClassScheduleServiceImpl implements IAiClassScheduleService
     }
 
     /**
-     * 查询班级课信息列表
+     * 查询排课信息列表
      * 
-     * @param aiClassSchedule 班级课信息
-     * @return 班级课信息
+     * @param aiClassSchedule 排课信息
+     * @return 排课信息
      */
     @Override
     public List<AiClassSchedule> selectAiClassScheduleList(AiClassSchedule aiClassSchedule)
@@ -45,9 +45,9 @@ public class AiClassScheduleServiceImpl implements IAiClassScheduleService
     }
 
     /**
-     * 新增班级课信息
+     * 新增排课信息
      * 
-     * @param aiClassSchedule 班级课信息
+     * @param aiClassSchedule 排课信息
      * @return 结果
      */
     @Override
@@ -58,9 +58,9 @@ public class AiClassScheduleServiceImpl implements IAiClassScheduleService
     }
 
     /**
-     * 修改班级课信息
+     * 修改排课信息
      * 
-     * @param aiClassSchedule 班级课信息
+     * @param aiClassSchedule 排课信息
      * @return 结果
      */
     @Override
@@ -71,9 +71,9 @@ public class AiClassScheduleServiceImpl implements IAiClassScheduleService
     }
 
     /**
-     * 批量删除班级课信息
+     * 批量删除排课信息
      * 
-     * @param scheduleIds 需要删除的班级课信息主键
+     * @param scheduleIds 需要删除的排课信息主键
      * @return 结果
      */
     @Override
@@ -83,9 +83,9 @@ public class AiClassScheduleServiceImpl implements IAiClassScheduleService
     }
 
     /**
-     * 删除班级课信息信息
+     * 删除排课信息信息
      * 
-     * @param scheduleId 班级课信息主键
+     * @param scheduleId 排课信息主键
      * @return 结果
      */
     @Override

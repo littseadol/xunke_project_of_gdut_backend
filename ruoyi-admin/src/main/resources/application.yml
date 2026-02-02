@@ -113,6 +113,8 @@ mybatis:
   mapperLocations: classpath*:mapper/**/*Mapper.xml
   # 加载全局的配置文件
   configLocation: classpath:mybatis/mybatis-config.xml
+  # 开启下划线转驼峰
+  map-underscore-to-camel-case: true
 
 # PageHelper分页插件
 pagehelper:
@@ -157,9 +159,9 @@ media:
 # 向量数据库
 milvus:
   username: root
-  password: Milvus12#$
-  ip: 10.21.49.68
-  port: 32540
+  password:
+  ip: 127.0.0.1
+  port: 19530
   collectionName: face
 
 # 人脸检测SmartJavaAI

@@ -1,6 +1,7 @@
 package com.ruoyi.lab.domain;
 
 import java.math.BigDecimal;
+import java.time.LocalTime;
 import java.util.Date;
 import com.fasterxml.jackson.annotation.JsonFormat;
 import org.apache.commons.lang3.builder.ToStringBuilder;
@@ -9,10 +10,10 @@ import com.ruoyi.common.annotation.Excel;
 import com.ruoyi.common.core.domain.BaseEntity;
 
 /**
- * 班级课信息对象 ai_class_schedule
+ * 排课信息对象 ai_class_schedule
  * 
  * @author Ldolphin
- * @date 2025-07-22
+ * @date 2025-07-24
  */
 public class AiClassSchedule extends BaseEntity
 {
@@ -91,10 +92,21 @@ public class AiClassSchedule extends BaseEntity
     private Long studentCount;
 
     /** 状态（0正常 1停用） */
+    @Excel(name = "状态", readConverterExp = "0=正常,1=停用")
     private String status;
 
     /** 删除标志（0代表存在 2代表删除） */
     private String delFlag;
+
+    /** 开始时间 */
+    @JsonFormat(pattern = "HH:mm:ss")
+    @Excel(name = "开始时间", width = 30, dateFormat = "HH:mm:ss")
+    private LocalTime startTime;
+
+    /** 结束时间 */
+    @JsonFormat(pattern = "HH:mm:ss")
+    @Excel(name = "结束时间", width = 30, dateFormat = "HH:mm:ss")
+    private LocalTime endTime;
 
     public void setScheduleId(Long scheduleId) 
     {
@@ -296,6 +308,26 @@ public class AiClassSchedule extends BaseEntity
         return delFlag;
     }
 
+    public void setStartTime(LocalTime startTime)
+    {
+        this.startTime = startTime;
+    }
+
+    public LocalTime getStartTime()
+    {
+        return startTime;
+    }
+
+    public void setEndTime(LocalTime endTime)
+    {
+        this.endTime = endTime;
+    }
+
+    public LocalTime getEndTime()
+    {
+        return endTime;
+    }
+
     @Override
     public String toString() {
         return new ToStringBuilder(this,ToStringStyle.MULTI_LINE_STYLE)
@@ -324,6 +356,8 @@ public class AiClassSchedule extends BaseEntity
             .append("updateBy", getUpdateBy())
             .append("updateTime", getUpdateTime())
             .append("remark", getRemark())
+            .append("startTime", getStartTime())
+            .append("endTime", getEndTime())
             .toString();
     }
 }

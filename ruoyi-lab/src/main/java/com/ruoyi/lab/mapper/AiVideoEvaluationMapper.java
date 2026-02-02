@@ -2,6 +2,8 @@ package com.ruoyi.lab.mapper;
 
 import java.util.List;
 import com.ruoyi.lab.domain.AiVideoEvaluation;
+import org.apache.ibatis.annotations.Select;
+import org.springframework.stereotype.Repository;
 
 /**
  * 视频评价Mapper接口
@@ -9,6 +11,7 @@ import com.ruoyi.lab.domain.AiVideoEvaluation;
  * @author Ldolphin
  * @date 2025-07-23
  */
+@Repository
 public interface AiVideoEvaluationMapper 
 {
     /**
@@ -58,4 +61,16 @@ public interface AiVideoEvaluationMapper
      * @return 结果
      */
     public int deleteAiVideoEvaluationByIds(Long[] ids);
+
+
+    // 新增关联查询方法
+    @Select("SELECT e.*, s.course_name, s.teacher_name, s.location " +
+            "FROM ai_video_evaluation e " +
+            "LEFT JOIN ai_class_schedule s ON e.schedule_id = s.schedule_id " +
+            "WHERE e.id = #{id}")
+    AiVideoEvaluation selectWithSchedule(Long id);
+
+    // 根据排课ID查询评价
+    @Select("SELECT * FROM ai_video_evaluation WHERE schedule_id = #{scheduleId}")
+    List<AiVideoEvaluation> selectByScheduleId(Long scheduleId);
 }

@@ -102,4 +102,11 @@ public class AiDeviceServiceImpl implements IAiDeviceService {
     public int updateCoordinate(AiDevice aiDevice) {
         return aiDeviceMapper.updateCoordinate(aiDevice);
     }
+
+
+    //还没实现
+    public String getLocationByDeviceId(Long deviceId) {
+        return aiDeviceMapper.getLocationByDeviceId(deviceId);
+
+    }
 }
